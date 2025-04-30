@@ -1,0 +1,77 @@
+services:
+  # PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-react-app
+    container_name: laravel-react-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - APP_URL=http://0.0.0.0:8000
+    networks:
+      - laravel-react-network
+
+  # Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: laravel-react-nginx
+    restart: unless-stopped
+    ports:
+      - "0.0.0.0:8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d/
+    depends_on:
+      - app
+    networks:
+      - laravel-react-network
+
+  # MySQL Service
+  db:
+    image: mysql:8.0
+    container_name: laravel-react-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+    volumes:
+      - dbdata:/var/lib/mysql/
+    ports:
+      - "0.0.0.0:3306:3306"
+    networks:
+      - laravel-react-network
+
+  # Node Service for frontend
+  node:
+    image: node:18-alpine
+    container_name: laravel-react-node
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "0.0.0.0:5173:5173"
+    environment:
+      - HOST=0.0.0.0
+      - VITE_APP_URL=http://0.0.0.0:8000
+    networks:
+      - laravel-react-network
+
+networks:
+  laravel-react-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
