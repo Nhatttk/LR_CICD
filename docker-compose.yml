@@ -12,6 +12,7 @@ services:
       - ./:/var/www:delegated
     depends_on:
       - db
+      - node
     environment:
       - DB_HOST=db
       - DB_PORT=3306
