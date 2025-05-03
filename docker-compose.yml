@@ -19,7 +19,7 @@ services:
       - DB_DATABASE=laravel
       - DB_USERNAME=root
       - DB_PASSWORD=root
-      - APP_URL=http://0.0.0.0:8000
+      - APP_URL=http://localhost:8000
     networks:
       - laravel-react-network
 
@@ -29,7 +29,7 @@ services:
     container_name: laravel-react-nginx
     restart: unless-stopped
     ports:
-      - "0.0.0.0:8000:80"
+      - "80:80"
     volumes:
       - ./:/var/www:delegated
       - ./docker/nginx:/etc/nginx/conf.d/
@@ -48,8 +48,6 @@ services:
       MYSQL_DATABASE: laravel
     volumes:
       - dbdata:/var/lib/mysql/
-    ports:
-      - "0.0.0.0:3306:3306"
     networks:
       - laravel-react-network
 
@@ -62,10 +60,10 @@ services:
       - ./:/var/www:delegated
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     ports:
-      - "0.0.0.0:5173:5173"
+      - "5173:5173"
     environment:
       - HOST=0.0.0.0
-      - VITE_APP_URL=http://0.0.0.0:8000
+      - VITE_APP_URL=http://localhost:80
     networks:
       - laravel-react-network
 
