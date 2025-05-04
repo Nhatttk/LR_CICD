@@ -24,3 +24,12 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo usermod -aG docker $USER
 
 echo "Cài đặt Docker và Docker Compose hoàn tất. Vui lòng đăng xuất và đăng nhập lại để áp dụng thay đổi nhóm docker." 
+
+# Cài đặt Node.js và npm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+source ~/.bashrc
+nvm install 18
+nvm use 18
+npm install -g npm@latest
+
+echo "Cài đặt Node.js và npm hoàn tất."
