@@ -63,7 +63,7 @@ services:
       - "5173:5173"
     environment:
       - HOST=0.0.0.0
-      - VITE_APP_URL=http://localhost:80
+      - VITE_APP_URL=http://localhost:8000
     networks:
       - laravel-react-network
 
