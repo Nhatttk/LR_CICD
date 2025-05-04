@@ -24,6 +24,17 @@ docker-compose exec app php artisan migrate --force
 
 echo "Triển khai hoàn tất! Ứng dụng đang chạy tại:"
 echo "- Backend: http://localhost:8000"
-echo "- Frontend: http://localhost:5173"
 echo ""
 echo "Lưu ý: Thay 'localhost' bằng địa chỉ IP công khai của EC2 khi truy cập từ xa" 
+
+# #!/bin/bash
+# set -e
+# echo "Deploy production..."
+# docker-compose down
+# docker-compose up -d --build
+# docker-compose exec app php artisan migrate --force
+
+# echo "Triển khai hoàn tất! Ứng dụng đang chạy tại:"
+# echo "- Backend: http://localhost:8000"
+# echo ""
+# echo "Lưu ý: Thay 'localhost' bằng địa chỉ IP công khai của EC2 khi truy cập từ xa" 
