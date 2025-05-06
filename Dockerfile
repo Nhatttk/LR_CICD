@@ -8,32 +8,38 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+    unzip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Get latest Composer
+# Copy composer from official image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
 WORKDIR /var/www
 
-# Copy existing application directory contents
-COPY . /var/www
+# Copy only composer files to leverage Docker cache
+COPY composer.json composer.lock ./
 
-# Install dependencies
+# Install PHP dependencies (optimized, no-dev for production)
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Change ownership of our applications
+# Copy the rest of the application code
+COPY . .
+
+# Optional: Copy custom php.ini if needed
+# COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/
+
+# Set correct permissions
 RUN chown -R www-data:www-data /var/www
 
-# Change current user to www-data
+# Switch to non-root user
 USER www-data
 
-# Expose port 9000 and start php-fpm server
+# Expose port 9000 for PHP-FPM
 EXPOSE 9000
-CMD ["php-fpm"] 
+
+# Start PHP-FPM server
+CMD ["php-fpm"]
