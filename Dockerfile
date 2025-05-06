@@ -20,14 +20,11 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy only composer files to leverage Docker cache
-COPY composer.json composer.lock ./
+# Copy the rest of the application code
+COPY . .
 
 # Install PHP dependencies (optimized, no-dev for production)
 RUN composer install --no-interaction --no-dev --optimize-autoloader
-
-# Copy the rest of the application code
-COPY . .
 
 # Optional: Copy custom php.ini if needed
 # COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/
