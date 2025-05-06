@@ -21,8 +21,8 @@ jobs:
         
     - name: Execute git pull on EC2
       run: |
-        ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+        ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_HOST }} <<- 'EOF'
           cd LR_CICD/
           git pull
           docker-compose up -d --build node
-        EOF 
+          EOF
