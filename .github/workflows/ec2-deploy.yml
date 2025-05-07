@@ -20,5 +20,4 @@ jobs:
         ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
         
     - name: Execute git pull on EC2
-      run: ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_HOST }} 
-        "cd LR_CICD/ && git pull && docker-compose up -d --build node"
+      run: ssh ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_HOST }} "cd LR_CICD/ && git pull && docker-compose up -d --build node"
